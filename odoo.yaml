@@ -29,8 +29,10 @@ metadata:
   labels:
     app: odoo-svr
 spec:
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: odoo-svr
+  replicas: 1
   template:
     metadata:
       labels:
