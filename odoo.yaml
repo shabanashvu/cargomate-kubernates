@@ -1,0 +1,76 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: odoo
+  labels:
+    name: odoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo-svr
+  namespace: odoo
+  labels:
+    app: odoo-svr
+spec:
+  ports:
+    - port: 8069
+  selector:
+    app: odoo-svr
+    tier: frontend
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo-svr
+  namespace: odoo
+  labels:
+    app: odoo-svr
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: odoo-svr
+        tier: frontend
+    spec:
+      containers:
+        - image: shabanash/cargomate
+          name: odoo
+          env:
+          - name: HOST
+            value: 10.55.0.3
+          - name: USER
+            value: cargomate
+          - name: PASSWORD
+            value: hiqzy9-cakpIk-qaksuq
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          ports:
+            - containerPort: 8069
+              name: odoo
+          volumeMounts:
+          - name: odoo-pvc
+            mountPath: /var/lib/odoo
+      volumes:
+      - name: odoo-pvc
+        persistentVolumeClaim:
+          claimName: odoo-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: odoo-pvc
+  namespace: odoo
+  labels:
+    app: odoo-svr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
