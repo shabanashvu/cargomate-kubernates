@@ -40,7 +40,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: asia.gcr.io/prologix/shabanash/cargomate:v1
+        - image: asia.gcr.io/prologix/cargomate_odoo:V1
           name: odoo
           env:
           - name: HOST
