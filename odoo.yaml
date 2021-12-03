@@ -44,7 +44,7 @@ spec:
           name: odoo
           env:
           - name: HOST
-            value: 10.55.0.3
+            value: 34.93.62.198
           - name: USER
             value: cargomate
           - name: PASSWORD
